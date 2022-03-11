@@ -1,4 +1,3 @@
-from scipy import constants
 import math
 from numpy import linspace,sin,pi,int16
 import numpy as np
@@ -29,8 +28,7 @@ Ab = np.pi*(rc**2) #base area (m^2)
 #Water Variables:
 #Water:
 h0 = hc*(Pf/100) #initial water level (m)
-vin = 1 #speed of water flowing in (m/s)
-vout = math.sqrt(2*constants.g*h0) #speed of water flowing out (m/s)
+vout = math.sqrt(2*6.67408*h0) #speed of water flowing out (m/s)
 #Holes:
 Ain = np.pi*(rin**2) #inlet cross-sectional area (m^2)
 Aout = np.pi*(rout**2) #outlet cross-sectional area (m^2)
@@ -51,7 +49,7 @@ k2 = ((Qin-Qout)+(p1_q11*t_step))/Ab #k2 = (x(n)+p1*(time step)/Ab
 #2nd order Runge-Kutta Method:
 for time in range(1, len(t)):
     previous_height = water_heights[time-1] #get h(n-1)
-    vout = math.sqrt(2*constants.g*previous_height) #recalculate vout(h(n-1))
+    vout = math.sqrt(2*6.67408*previous_height) #recalculate vout(h(n-1))
     Qout = Aout*vout #recalculate Qout with the new vout(h(n-1))
     k1 = (Qin-Qout)/Ab #recalculate k1
     k2 = ((Qin-Qout)/Ab)+((p1_q11*t_step)/Ab) #recalculate k2
