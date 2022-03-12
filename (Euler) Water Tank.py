@@ -6,27 +6,28 @@ from matplotlib import pyplot as plt
 
 #Variables you can play with:
 #Time:
-t_step = 0.01 #s
-n = 3000 #number of steps
+t_step = 1 #s
+n = 300 #number of steps
 #Cylinder Tank:
-rc = 1 #radius (m)
+rc = 2 #radius (m)
 hc = 30 #height (m)
 Pf = 100 #What % of the tank is full?
 #Water:
 vin = 1 #speed of water flowing in (m/s)
 #Holes:
 rin = 0.1 #inlet radius (m)
-rout = 0.3 #outlet radius (m)
+rout = 0.2 #outlet radius (m)
 
 #Other variables (that you cannot play with):
 #Time:
-t = np.linspace(0, (n*t_step), n) #generate x-axis values
+t = np.linspace(0, (n*t_step), round(n/2)) #generate x-axis values
+t_step=t_step*2 #correct t_step back to initial value
 #Cylinder
 Ab = np.pi*(rc**2) #base area (m^2)
 #Water Variables:
 #Water:
 h0 = hc*(Pf/100) #initial water level (m)
-vout = math.sqrt(2*6.67408*h0) #speed of water flowing out (m/s)
+vout = math.sqrt(2*9.81*h0) #speed of water flowing out (m/s)
 #Holes:
 Ain = np.pi*(rin**2) #inlet cross-sectional area (m^2)
 Aout = np.pi*(rout**2) #outlet cross-sectional area (m^2)
@@ -39,7 +40,7 @@ water_heights.append(h0) #add initial water level
 #Euler's Method:
 for time in range(1, len(t)):
     previous_height = water_heights[time-1] #get h(n-1)
-    vout = math.sqrt(2*6.67408*previous_height) #recalculate vout(h(n-1))
+    vout = math.sqrt(2*9.81*previous_height) #recalculate vout(h(n-1))
     Qout = Aout*vout #recalculate Qout with the new vout(h(n-1))
     current_water_height = previous_height+((Qin-Qout)/Ab)*t_step #h(n) = h(n-1) + (the change in height)*(time step)
     water_heights.append(current_water_height) #add the value of the current height to the y-axis
@@ -53,9 +54,10 @@ for time in range(1, len(t)):
 #Displaying the graph:        
 water_heights = np.array(water_heights)
 plt.figure(dpi=300) 
-plt.title(f"Euler's Method (step={t_step})")
+plt.title(f"Euler's Method (step={t_step/2})")
 plt.xlabel("Time (s)")
 plt.ylabel("Height (m)")
 plt.plot(t, water_heights, color="blue")
 plt.plot(t, np.zeros(len(t)) , color="gray")
+plt.plot(t, [hc]*len(t) , color="gray")
 plt.show()
